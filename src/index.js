@@ -37,12 +37,20 @@ app.post('/users', (request, response) => {
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
   const {username} = request;
-  console.log(username)
   return response.json(username.todos);
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
-  
+  const {username} = request;
+  const {title, deadline} = request.body;
+  username.todos.push({
+    id: uuidv4(),
+    title: title,
+    done: false,
+    deadline: new Date(deadline),
+    created_at: new Date()
+  });
+  return response.status(201).send();
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
